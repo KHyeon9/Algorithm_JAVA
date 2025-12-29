@@ -1,39 +1,47 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class BOJ15649 {
-    static int N, M;
+    static Deque<Integer> nums = new ArrayDeque<>();
+    static StringBuilder answer = new StringBuilder();
     static boolean[] visited;
-    static int[] arr;
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        M = sc.nextInt();
-        arr = new int[N];
-        visited = new boolean[N];
-        backtracking(0);
+    public static void main(String[] args) throws Exception {
+        BufferedReader br =
+                new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int n = Integer.parseInt(st.nextToken());
+        int m = Integer.parseInt(st.nextToken());
+        visited = new boolean[n + 1];
+
+        backtracking(0, n, m);
+
+        System.out.println(answer);
     }
 
-    public static void backtracking(int length) {
-         if (length == M) {
-             // 수열 출력
-             printArray();
-             return;
-         }
-         // 갈 수 있는 모든 선택지
-         for (int i = 0; i < N; i++) {
-             if (!visited[i]) {
-                 visited[i] = true;
-                 arr[length] = i;
-                 backtracking(length + 1);
-                 visited[i] = false;
-             }
-         }
-    }
-
-    private static void printArray() {
-        for (int i = 0; i < M; i++) {
-            System.out.print(arr[i] + 1 + " ");
+    private static void backtracking(int depth, int length, int checkCnt) {
+        // 깊이 (현재 저장 숫자)와 고르는 횟수가 같으면 값 저장
+        if (depth == checkCnt) {
+            answerAppend();
+            return;
         }
+        // 최대 수까지 돌면서 값을 저장
+        for (int i = 1; i <= length; i++) {
+            if (!visited[i]){
+                visited[i] = true;
+                nums.addLast(i);
+                backtracking(depth + 1, length, checkCnt);
+                nums.pollLast();
+                visited[i] = false;
+            }
+        }
+    }
+    // 결과 저장
+    private static void answerAppend() {
+        for (int num : nums) {
+            answer.append(num).append(" ");
+        }
+        answer.append("\n");
     }
 }
