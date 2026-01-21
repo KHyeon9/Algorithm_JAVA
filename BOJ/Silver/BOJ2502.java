@@ -2,36 +2,37 @@ import java.io.*;
 import java.util.*;
 
 public class BOJ2502 {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br =
-                new BufferedReader(new InputStreamReader(System.in));
+    static int[] dp;
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int d = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+        int day = Integer.parseInt(st.nextToken());
+        int cnt = Integer.parseInt(st.nextToken());
 
-        int[] answer = solve(d, k);
-        for (int cnt : answer) {
-            System.out.println(cnt);
-        }
+        solve(cnt, day);
+
+        System.out.println(dp[1]);
+        System.out.println(dp[2]);
     }
 
-    private static int[] solve(int day, int riceCakeCnt) {
-        int[] dp = new int[day + 1];
+    private static void solve(int cnt, int day) {
+        for (int i = 0; i < cnt; i++) {
+            dp = new int[day + 1];
+            for (int first = 1; first < cnt; first++) {
+                for (int second = 1; second < cnt; second++) {
+                    dp[1] = first;
+                    dp[2] = second;
+                    for (int j = 3; j <= day; j++) {
+                        dp[j] = dp[j - 1] + dp[j - 2];
+                    }
 
-        for (int first = 1; first <= riceCakeCnt; first++) {
-            for (int second = 2; second <= riceCakeCnt; second++) {
-                dp[1] = first;
-                dp[2] = second;
-
-                for (int i = 3; i <= day; i++) {
-                    dp[i] = dp[i - 1] + dp[i -2];
-                }
-                if (dp[day] == riceCakeCnt) {
-                    return new int[] {first, second};
+                    if (dp[day] == cnt) {
+                        return;
+                    }
                 }
             }
         }
-        return new int[] {-1, -1};
     }
 }
