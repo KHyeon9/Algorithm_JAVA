@@ -1,33 +1,27 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class BOJ14425 {
     public static void main(String[] args) throws IOException {
-        BufferedReader br =
-                new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
 
-        String[] strArr = new String[n];
-        for (int i = 0; i < n; i++) {
-            strArr[i] = br.readLine();
+        int setLen = Integer.parseInt(st.nextToken());
+        int searchCnt = Integer.parseInt(st.nextToken());
+
+        Set<String> strSet = new HashSet<>();
+        for (int i = 0; i < setLen; i++) {
+            strSet.add(br.readLine());
         }
-        int cnt = 0;
-        for (int i = 0; i < m; i++) {
-            String checkStr = br.readLine();
-            // 문자열 리스트에 checkStr과 같은 값이 있으면 +1
-            for (String str : strArr) {
-                if (str.equals(checkStr)) {
-                    cnt++;
-                    break;
-                }
+
+        int answer = 0;
+        // 집합에 포함되는지 확인
+        for (int i = 0; i < searchCnt; i++) {
+            String searchStr = br.readLine();
+            if (strSet.contains(searchStr)) {
+                answer++;
             }
         }
-
-        System.out.println(cnt);
-        br.close();
+        System.out.println(answer);
     }
 }
