@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class BOJ20920 {
@@ -9,44 +7,39 @@ public class BOJ20920 {
                 new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        // 중복 제거로 값 받기
-        Map<String, Integer> wordsMap = new HashMap<>();
-        for (int i = 0; i < n; i++) {
+        int wordCnt = Integer.parseInt(st.nextToken());
+        int standardLength = Integer.parseInt(st.nextToken());
+        // 입력 단어가 길이 이상인 겨우 총 갯수와 같이 저장
+        Map<String, Integer> wordAndCnt = new HashMap<>();
+        for (int i = 0; i < wordCnt; i++) {
             String word = br.readLine();
-            // 문자열의 길이가 m이상일 경우에만 저장
-            if (word.length() >= m) {
-                wordsMap.put(
+            if (word.length() >= standardLength) {
+                wordAndCnt.put(
                         word,
-                        wordsMap.getOrDefault(
-                                word,
-                                0
-                        ) + 1
+                        wordAndCnt.getOrDefault(word, 0) + 1
                 );
             }
         }
-        // 정렬하기 위한 키셋 리스트
-        List<String> wordsList = new ArrayList<>(wordsMap.keySet());
-        Collections.sort(wordsList, (o1, o2) -> {
-            // 등장 갯수에 따른 정렬
-            int cntGap = wordsMap.get(o2).compareTo(wordsMap.get(o1));
-            if (cntGap != 0) {
-                return cntGap;
+        // 정렬
+        List<String> wordSort = new ArrayList<>(wordAndCnt.keySet());
+        wordSort.sort((o1, o2) -> {
+            // 자주 나오는 단어 순
+            if (!wordAndCnt.get(o2).equals(wordAndCnt.get(o1))) {
+                return wordAndCnt.get(o2) - wordAndCnt.get(o1);
             }
-            // 문자열 길이에 따른 정렬
-            int lenGap = o2.length() - o1.length();
-            if (lenGap != 0) {
-                return lenGap;
+            // 단어의 길이가 긴 순
+            if (o2.length() != o1.length()) {
+                return o2.length() - o1.length();
             }
-            // 두 조건이 아닌 경우 사전순 정렬
+            // 알파벳 사전 순
             return o1.compareTo(o2);
         });
         // 출력
         StringBuilder answer = new StringBuilder();
-        for (String word : wordsList) {
+        for (String word : wordSort) {
             answer.append(word).append("\n");
         }
         System.out.println(answer);
     }
+
 }
