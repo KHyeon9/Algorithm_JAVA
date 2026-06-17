@@ -1,5 +1,5 @@
 # Algorithm_JAVA
-BOJ/Programmers
+BOJ/Programmers/LeetCode/Goorm
 
 코딩 연습
 
